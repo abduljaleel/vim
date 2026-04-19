@@ -1,0 +1,44 @@
+# Build artifacts
+bin/
+dist/
+*.exe
+coverage.out
+coverage.html
+
+# Go
+vendor/
+
+# Rust
+rust/*/target/
+rust/*/Cargo.lock.bak
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+.mypy_cache/
+.pytest_cache/
+.ruff_cache/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+
+# Local config
+.env
+.env.local
+*.local.yml
+
+# Docker
+deploy/docker/data/
+
+# Secrets — never commit these
+*.pem
+*.key
+*.crt
+credentials.json

@@ -1,0 +1,76 @@
+version: '3.9'
+
+# Local development infrastructure for VIM.
+# Brings up JanusGraph + Cassandra + PostgreSQL + MinIO for offline development.
+#
+# Usage:
+#   make dev-up
+#   make dev-down
+#   make dev-reset  (destroys data)
+
+services:
+  cassandra:
+    image: cassandra:5.0
+    container_name: vim-cassandra
+    environment:
+      - CASSANDRA_CLUSTER_NAME=vim-dev
+      - MAX_HEAP_SIZE=2G
+      - HEAP_NEWSIZE=400M
+    ports:
+      - "9042:9042"
+    volumes:
+      - cassandra-data:/var/lib/cassandra
+    healthcheck:
+      test: ["CMD", "cqlsh", "-e", "describe keyspaces"]
+      interval: 15s
+      timeout: 10s
+      retries: 10
+
+  janusgraph:
+    image: janusgraph/janusgraph:1.0.0
+    container_name: vim-janusgraph
+    environment:
+      - JANUS_PROPS_TEMPLATE=cql
+      - janusgraph.storage.backend=cql
+      - janusgraph.storage.hostname=cassandra
+      - janusgraph.storage.cql.keyspace=vim
+    depends_on:
+      cassandra:
+        condition: service_healthy
+    ports:
+      - "8182:8182"
+
+  postgres:
+    image: postgres:16
+    container_name: vim-postgres
+    environment:
+      - POSTGRES_USER=vim
+      - POSTGRES_PASSWORD=vim-dev-only
+      - POSTGRES_DB=vim
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U vim"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  minio:
+    image: minio/minio:latest
+    container_name: vim-minio
+    command: server /data --console-address ":9001"
+    environment:
+      - MINIO_ROOT_USER=vim-dev
+      - MINIO_ROOT_PASSWORD=vim-dev-only
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - minio-data:/data
+
+volumes:
+  cassandra-data:
+  postgres-data:
+  minio-data:

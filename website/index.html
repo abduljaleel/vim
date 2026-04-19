@@ -1,0 +1,363 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>VIM — Vulnerability Inheritance Map</title>
+  <meta name="description" content="An open-source graph database that maps vulnerability lineage across forks, vendored dependencies, and compiled binaries. Apache 2.0. Targeting OpenSSF." />
+  <meta property="og:title" content="VIM — Vulnerability Inheritance Map" />
+  <meta property="og:description" content="Mapping vulnerability lineage across the software supply chain." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://vim-project.org" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%230f172a'/%3E%3Ctext x='32' y='42' font-family='ui-monospace,monospace' font-size='28' font-weight='700' text-anchor='middle' fill='%2338bdf8'%3EV%3C/text%3E%3C/svg%3E" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter','system-ui','sans-serif'],
+            mono: ['JetBrains Mono','ui-monospace','SFMono-Regular','monospace']
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', system-ui, sans-serif; }
+    code, pre, .mono { font-family: 'JetBrains Mono', ui-monospace, monospace; }
+    .gradient-text {
+      background: linear-gradient(90deg, #38bdf8 0%, #818cf8 50%, #c084fc 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .grid-bg {
+      background-image:
+        linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
+      background-size: 32px 32px;
+    }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 antialiased">
+
+<!-- Nav -->
+<header class="sticky top-0 z-30 backdrop-blur border-b border-slate-800/70 bg-slate-950/80">
+  <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+    <a href="#" class="flex items-center gap-2 font-semibold tracking-tight">
+      <span class="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-slate-900 border border-slate-700">
+        <span class="text-sky-400 font-bold mono">V</span>
+      </span>
+      <span>VIM</span>
+      <span class="text-slate-500 text-sm hidden sm:inline">— Vulnerability Inheritance Map</span>
+    </a>
+    <nav class="flex items-center gap-6 text-sm text-slate-300">
+      <a href="#problem" class="hover:text-white">Problem</a>
+      <a href="#how" class="hover:text-white hidden sm:inline">How it works</a>
+      <a href="#ecosystem" class="hover:text-white hidden md:inline">Ecosystem</a>
+      <a href="#roadmap" class="hover:text-white hidden md:inline">Roadmap</a>
+      <a href="https://github.com/abduljaleel/vim" class="inline-flex items-center gap-2 px-3 py-1.5 rounded-md bg-white text-slate-900 font-medium hover:bg-slate-200">
+        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12a12 12 0 008.21 11.39c.6.11.82-.26.82-.58v-2c-3.34.73-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.75.08-.73.08-.73 1.21.08 1.84 1.24 1.84 1.24 1.07 1.84 2.81 1.31 3.5 1 .11-.78.42-1.31.76-1.61-2.67-.3-5.47-1.34-5.47-5.95 0-1.31.47-2.39 1.24-3.23-.12-.3-.54-1.53.12-3.18 0 0 1-.32 3.3 1.23A11.5 11.5 0 0112 5.8c1.02.01 2.05.14 3.01.4 2.3-1.55 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.77.84 1.24 1.92 1.24 3.23 0 4.62-2.81 5.65-5.49 5.95.43.37.81 1.1.81 2.22v3.29c0 .32.22.7.82.58A12 12 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+        GitHub
+      </a>
+    </nav>
+  </div>
+</header>
+
+<!-- Hero -->
+<section class="relative overflow-hidden">
+  <div class="absolute inset-0 grid-bg opacity-60"></div>
+  <div class="absolute inset-0 bg-gradient-to-b from-transparent via-slate-950/60 to-slate-950"></div>
+  <div class="relative max-w-6xl mx-auto px-6 pt-24 pb-20">
+    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-900/70 border border-slate-800 text-xs text-slate-300 mb-8">
+      <span class="inline-block w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
+      Pre-launch · Targeting OpenSSF Sandbox · Apache 2.0
+    </div>
+    <h1 class="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight leading-[1.05]">
+      Mapping <span class="gradient-text">vulnerability lineage</span><br />
+      across the software supply chain.
+    </h1>
+    <p class="mt-8 text-lg sm:text-xl text-slate-300 max-w-3xl leading-relaxed">
+      VIM is an open-source graph database that traces how vulnerabilities propagate across forks, vendored dependencies, and compiled binaries — so a single discovery upstream reaches every affected system downstream.
+    </p>
+    <div class="mt-10 flex flex-wrap gap-3">
+      <a href="https://github.com/abduljaleel/vim" class="inline-flex items-center gap-2 px-5 py-3 rounded-lg bg-sky-500 text-slate-950 font-semibold hover:bg-sky-400 transition">
+        View on GitHub
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+      </a>
+      <a href="#how" class="inline-flex items-center gap-2 px-5 py-3 rounded-lg border border-slate-700 text-slate-200 hover:bg-slate-900 transition">
+        How it works
+      </a>
+      <a href="#contact" class="inline-flex items-center gap-2 px-5 py-3 rounded-lg border border-slate-800 text-slate-400 hover:text-slate-200 hover:border-slate-700 transition">
+        Contact
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- Problem -->
+<section id="problem" class="border-t border-slate-900">
+  <div class="max-w-6xl mx-auto px-6 py-24">
+    <div class="max-w-3xl">
+      <p class="text-sm uppercase tracking-widest text-sky-400 font-medium">The problem</p>
+      <h2 class="mt-4 text-3xl sm:text-4xl font-bold tracking-tight">Finding bugs is cheap. Tracking where they live is not.</h2>
+      <p class="mt-6 text-lg text-slate-300 leading-relaxed">
+        AI-driven vulnerability discovery has collapsed the cost of finding flaws. The bottleneck now is mapping where the vulnerable code actually lives. No existing tool answers the question: <em class="text-white">given a vulnerability in project X, which forks, vendored copies, and compiled binaries are also affected?</em>
+      </p>
+    </div>
+
+    <div class="mt-14 grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div class="p-6 rounded-xl border border-slate-800 bg-slate-900/40">
+        <p class="text-4xl font-bold gradient-text">59.3%</p>
+        <p class="mt-3 text-slate-300 leading-relaxed">of vulnerable copied files are C code — invisible to package-level SCA tools.</p>
+        <p class="mt-4 text-xs text-slate-500">World of Code research, Mockus et al.</p>
+      </div>
+      <div class="p-6 rounded-xl border border-slate-800 bg-slate-900/40">
+        <p class="text-4xl font-bold gradient-text">17%</p>
+        <p class="mt-3 text-slate-300 leading-relaxed">of open-source components enter codebases outside package managers entirely.</p>
+        <p class="mt-4 text-xs text-slate-500">Black Duck 2026 OSSRA</p>
+      </div>
+      <div class="p-6 rounded-xl border border-slate-800 bg-slate-900/40">
+        <p class="text-4xl font-bold gradient-text">37 days</p>
+        <p class="mt-3 text-slate-300 leading-relaxed">median patch-porting delay across hard forks — 25%+ take over 3 months.</p>
+        <p class="mt-4 text-xs text-slate-500">Pan et al., ISSTA 2024</p>
+      </div>
+    </div>
+
+    <div class="mt-10 p-6 rounded-xl border border-amber-900/40 bg-amber-950/20 text-amber-100/90">
+      <p class="text-sm"><span class="font-semibold">Regulatory deadline.</span> EU Cyber Resilience Act takes effect <span class="font-mono text-amber-300">11 September 2026</span>. Penalties up to €15M or 2.5% of global turnover for non-compliance — and it requires lineage evidence that current SCA tools cannot provide.</p>
+    </div>
+  </div>
+</section>
+
+<!-- How it works -->
+<section id="how" class="border-t border-slate-900 bg-slate-950">
+  <div class="max-w-6xl mx-auto px-6 py-24">
+    <p class="text-sm uppercase tracking-widest text-sky-400 font-medium">How it works</p>
+    <h2 class="mt-4 text-3xl sm:text-4xl font-bold tracking-tight">Trilateral identity resolution.</h2>
+    <p class="mt-6 text-lg text-slate-300 max-w-3xl leading-relaxed">
+      VIM identifies every code unit three ways at once. Combined, they survive renames, vendoring, forks, and non-trivial edits.
+    </p>
+
+    <div class="mt-14 grid md:grid-cols-3 gap-6">
+      <div class="p-6 rounded-xl border border-slate-800 bg-gradient-to-b from-slate-900 to-slate-950">
+        <div class="text-xs font-medium text-slate-500 uppercase tracking-widest">Extrinsic</div>
+        <h3 class="mt-2 text-xl font-semibold">pURL</h3>
+        <p class="mt-3 text-slate-400 text-sm leading-relaxed">ECMA-427 package identity. Ecosystem-aware. Aligned with OSV, GUAC, and deps.dev.</p>
+        <pre class="mt-4 text-xs bg-slate-950 border border-slate-800 rounded-lg p-3 text-sky-200 overflow-x-auto">pkg:npm/lodash@4.17.21</pre>
+      </div>
+      <div class="p-6 rounded-xl border border-slate-800 bg-gradient-to-b from-slate-900 to-slate-950">
+        <div class="text-xs font-medium text-slate-500 uppercase tracking-widest">Intrinsic</div>
+        <h3 class="mt-2 text-xl font-semibold">SWHID</h3>
+        <p class="mt-3 text-slate-400 text-sm leading-relaxed">Software Heritage ID. Content-addressable. Identifies code by what it <em>is</em>, not what it's called.</p>
+        <pre class="mt-4 text-xs bg-slate-950 border border-slate-800 rounded-lg p-3 text-sky-200 overflow-x-auto">swh:1:cnt:3b18e512...</pre>
+      </div>
+      <div class="p-6 rounded-xl border border-slate-800 bg-gradient-to-b from-slate-900 to-slate-950">
+        <div class="text-xs font-medium text-slate-500 uppercase tracking-widest">Fuzzy</div>
+        <h3 class="mt-2 text-xl font-semibold">TLSH</h3>
+        <p class="mt-3 text-slate-400 text-sm leading-relaxed">Locality-sensitive hash. Survives patches and refactors. Similarity becomes a distance query.</p>
+        <pre class="mt-4 text-xs bg-slate-950 border border-slate-800 rounded-lg p-3 text-sky-200 overflow-x-auto">5ca1d8a25f213672...</pre>
+      </div>
+    </div>
+
+    <!-- Prototype signal -->
+    <div class="mt-14 p-6 rounded-xl border border-slate-800 bg-slate-900/40">
+      <p class="text-sm uppercase tracking-widest text-sky-400 font-medium">Prototype signal</p>
+      <p class="mt-3 text-slate-300">Measured TLSH distance in our end-to-end test harness:</p>
+      <div class="mt-5 overflow-x-auto">
+        <table class="w-full text-sm">
+          <thead class="text-slate-400 border-b border-slate-800">
+            <tr>
+              <th class="text-left py-2 font-medium">Relationship</th>
+              <th class="text-right py-2 font-medium">TLSH distance</th>
+              <th class="text-right py-2 font-medium hidden sm:table-cell">Separation</th>
+            </tr>
+          </thead>
+          <tbody class="mono text-slate-200">
+            <tr class="border-b border-slate-800/60">
+              <td class="py-3">Byte-identical</td>
+              <td class="text-right text-emerald-400">0</td>
+              <td class="text-right text-slate-500 hidden sm:table-cell">—</td>
+            </tr>
+            <tr class="border-b border-slate-800/60">
+              <td class="py-3">Single-site security patch</td>
+              <td class="text-right text-sky-400">48</td>
+              <td class="text-right text-slate-500 hidden sm:table-cell">baseline</td>
+            </tr>
+            <tr>
+              <td class="py-3">Unrelated code</td>
+              <td class="text-right text-rose-400">297</td>
+              <td class="text-right text-slate-500 hidden sm:table-cell">6.2×</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="mt-4 text-xs text-slate-500">Runnable: <code class="bg-slate-950 px-1.5 py-0.5 rounded">go test ./pkg/identity/</code></p>
+    </div>
+  </div>
+</section>
+
+<!-- Ecosystem -->
+<section id="ecosystem" class="border-t border-slate-900">
+  <div class="max-w-6xl mx-auto px-6 py-24">
+    <p class="text-sm uppercase tracking-widest text-sky-400 font-medium">Ecosystem</p>
+    <h2 class="mt-4 text-3xl sm:text-4xl font-bold tracking-tight">Designed to complement, not replace.</h2>
+    <p class="mt-6 text-lg text-slate-300 max-w-3xl leading-relaxed">
+      VIM is the lineage layer between upstream discovery and downstream remediation. It is built to interoperate with existing OpenSSF projects — not duplicate them.
+    </p>
+
+    <div class="mt-14 overflow-x-auto">
+      <table class="w-full text-sm border border-slate-800 rounded-xl overflow-hidden">
+        <thead class="bg-slate-900 text-slate-300">
+          <tr>
+            <th class="text-left p-4 font-semibold">Existing tool</th>
+            <th class="text-left p-4 font-semibold">What it does</th>
+            <th class="text-left p-4 font-semibold">How VIM extends it</th>
+          </tr>
+        </thead>
+        <tbody class="text-slate-300 divide-y divide-slate-900">
+          <tr>
+            <td class="p-4 font-medium text-white">GUAC</td>
+            <td class="p-4">Artifact composition</td>
+            <td class="p-4 text-slate-400">Adds fork lineage + code-level provenance</td>
+          </tr>
+          <tr>
+            <td class="p-4 font-medium text-white">OSV</td>
+            <td class="p-4">Vuln-to-version mapping</td>
+            <td class="p-4 text-slate-400">Traces vulns across forks and copies</td>
+          </tr>
+          <tr>
+            <td class="p-4 font-medium text-white">deps.dev</td>
+            <td class="p-4">Dependency resolution</td>
+            <td class="p-4 text-slate-400">Tracks vendored code outside dep trees</td>
+          </tr>
+          <tr>
+            <td class="p-4 font-medium text-white">Scorecard</td>
+            <td class="p-4">Security posture</td>
+            <td class="p-4 text-slate-400">Monitors patch propagation across forks</td>
+          </tr>
+          <tr>
+            <td class="p-4 font-medium text-white">SLSA / Sigstore</td>
+            <td class="p-4">Build integrity</td>
+            <td class="p-4 text-slate-400">Connects binary provenance to source lineage</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="mt-14">
+      <p class="text-sm uppercase tracking-widest text-sky-400 font-medium mb-4">Data sources</p>
+      <div class="flex flex-wrap gap-3">
+        <span class="px-4 py-2 rounded-full border border-slate-800 bg-slate-900/40 text-sm">Software Heritage</span>
+        <span class="px-4 py-2 rounded-full border border-slate-800 bg-slate-900/40 text-sm">World of Code</span>
+        <span class="px-4 py-2 rounded-full border border-slate-800 bg-slate-900/40 text-sm">OSV.dev</span>
+        <span class="px-4 py-2 rounded-full border border-slate-800 bg-slate-900/40 text-sm">deps.dev</span>
+        <span class="px-4 py-2 rounded-full border border-slate-800 bg-slate-900/40 text-sm">GUAC</span>
+        <span class="px-4 py-2 rounded-full border border-slate-800 bg-slate-900/40 text-sm">CISA KEV</span>
+        <span class="px-4 py-2 rounded-full border border-slate-800 bg-slate-900/40 text-sm">Sigstore / Rekor</span>
+        <span class="px-4 py-2 rounded-full border border-slate-800 bg-slate-900/40 text-sm">SBOM (SPDX, CycloneDX)</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Quickstart -->
+<section class="border-t border-slate-900 bg-slate-950">
+  <div class="max-w-6xl mx-auto px-6 py-24">
+    <p class="text-sm uppercase tracking-widest text-sky-400 font-medium">Try the prototype</p>
+    <h2 class="mt-4 text-3xl sm:text-4xl font-bold tracking-tight">The identity layer, today.</h2>
+    <p class="mt-6 text-lg text-slate-300 max-w-3xl leading-relaxed">
+      The trilateral identity resolution layer is runnable right now. Graph backend, ingestion, and GUAC integration land later in the roadmap.
+    </p>
+
+    <div class="mt-10 rounded-xl border border-slate-800 bg-black/60 overflow-hidden">
+      <div class="px-4 py-2 border-b border-slate-800 text-xs text-slate-500 flex items-center gap-2">
+        <span class="w-2 h-2 rounded-full bg-rose-500"></span>
+        <span class="w-2 h-2 rounded-full bg-amber-500"></span>
+        <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+        <span class="ml-3 mono">bash</span>
+      </div>
+<pre class="p-5 text-sm text-slate-200 overflow-x-auto mono"><span class="text-slate-500"># Clone and build</span>
+git clone https://github.com/abduljaleel/vim.git
+cd vim
+go build -o bin/vim-cli ./cmd/vim-cli
+
+<span class="text-slate-500"># Compute a LineageID for any file</span>
+./bin/vim-cli identity README.md 'pkg:github/abduljaleel/vim@pre-alpha'
+<span class="text-emerald-400">SWHID: swh:1:cnt:5049b7304c2b1037...
+pURL:  pkg:github/abduljaleel/vim@pre-alpha
+TLSH:  5ca1d8a25f2136724b37cecb...</span>
+
+<span class="text-slate-500"># Compare two files by similarity</span>
+./bin/vim-cli similarity a.c b.c
+<span class="text-emerald-400">TLSH distance: 48
+Result: MODERATE similarity (possibly related / patched variant)</span></pre>
+    </div>
+  </div>
+</section>
+
+<!-- Roadmap -->
+<section id="roadmap" class="border-t border-slate-900">
+  <div class="max-w-6xl mx-auto px-6 py-24">
+    <p class="text-sm uppercase tracking-widest text-sky-400 font-medium">Roadmap</p>
+    <h2 class="mt-4 text-3xl sm:text-4xl font-bold tracking-tight">Launch to production.</h2>
+
+    <div class="mt-14 relative">
+      <div class="absolute left-3 top-0 bottom-0 w-px bg-slate-800"></div>
+      <ol class="space-y-10">
+        <li class="pl-12 relative">
+          <span class="absolute left-0 top-1 inline-flex items-center justify-center w-6 h-6 rounded-full border-2 border-sky-500 bg-slate-950 text-xs font-bold text-sky-400">1</span>
+          <h3 class="font-semibold text-lg">Foundation · Apr–May 2026</h3>
+          <p class="text-slate-400 mt-2">OpenSSF Sandbox submission · Alpha-Omega & CRC-P grant applications · Community engagement at OpenSSF Community Day NA.</p>
+        </li>
+        <li class="pl-12 relative">
+          <span class="absolute left-0 top-1 inline-flex items-center justify-center w-6 h-6 rounded-full border-2 border-slate-700 bg-slate-950 text-xs font-bold text-slate-400">2</span>
+          <h3 class="font-semibold text-lg">Technical build · Jun–Jul 2026</h3>
+          <p class="text-slate-400 mt-2">JanusGraph + Cassandra core · Software Heritage ingestion · Phase 1 GUAC integration · Glasswing public vulnerability report tie-in.</p>
+        </li>
+        <li class="pl-12 relative">
+          <span class="absolute left-0 top-1 inline-flex items-center justify-center w-6 h-6 rounded-full border-2 border-slate-700 bg-slate-950 text-xs font-bold text-slate-400">3</span>
+          <h3 class="font-semibold text-lg">Community & market · Aug–Oct 2026</h3>
+          <p class="text-slate-400 mt-2">Alpha release at DEF CON 34 · EU CRA enforcement window outreach · OpenSSF Incubation application · Beta release with Phase 1 GUAC integration complete.</p>
+        </li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<!-- Contact / CTA -->
+<section id="contact" class="border-t border-slate-900 bg-gradient-to-b from-slate-950 to-slate-900">
+  <div class="max-w-4xl mx-auto px-6 py-24 text-center">
+    <h2 class="text-3xl sm:text-4xl font-bold tracking-tight">Get involved.</h2>
+    <p class="mt-6 text-lg text-slate-300">
+      VIM is pre-launch. We are recruiting maintainers, research partners, and design-partner organisations with real supply chain compliance problems.
+    </p>
+    <div class="mt-10 flex flex-wrap gap-3 justify-center">
+      <a href="https://github.com/abduljaleel/vim" class="inline-flex items-center gap-2 px-5 py-3 rounded-lg bg-white text-slate-900 font-semibold hover:bg-slate-200">Star on GitHub</a>
+      <a href="https://slack.openssf.org" class="inline-flex items-center gap-2 px-5 py-3 rounded-lg border border-slate-700 hover:bg-slate-800">OpenSSF Slack <span class="text-slate-500">#vim</span></a>
+      <a href="mailto:hello@vim-project.org" class="inline-flex items-center gap-2 px-5 py-3 rounded-lg border border-slate-700 hover:bg-slate-800">Contact</a>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="border-t border-slate-900">
+  <div class="max-w-6xl mx-auto px-6 py-10 flex flex-wrap items-center justify-between gap-4 text-sm text-slate-500">
+    <div>
+      <span class="text-slate-300 font-semibold">VIM</span> · Apache License 2.0 · Built by
+      <a href="https://acelera.ai" class="text-slate-300 hover:text-white">Acelera Intelligence</a>
+    </div>
+    <div class="flex items-center gap-6">
+      <a href="https://github.com/abduljaleel/vim" class="hover:text-slate-200">GitHub</a>
+      <a href="https://github.com/abduljaleel/vim/blob/main/SECURITY.md" class="hover:text-slate-200">Security</a>
+      <a href="https://github.com/abduljaleel/vim/blob/main/GOVERNANCE.md" class="hover:text-slate-200">Governance</a>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
