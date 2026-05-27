@@ -46,7 +46,7 @@ type SWHID struct {
 func ComputeContentSWHID(content []byte) SWHID {
 	// Git blob hashing: "blob <len>\0<content>"
 	h := sha1.New() //nolint:gosec // required by SWHID/Git blob spec
-	fmt.Fprintf(h, "blob %d", len(content))
+	_, _ = fmt.Fprintf(h, "blob %d", len(content))
 	h.Write([]byte{0})
 	h.Write(content)
 	return SWHID{

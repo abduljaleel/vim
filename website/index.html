@@ -57,6 +57,7 @@
     </a>
     <nav class="flex items-center gap-6 text-sm text-slate-300">
       <a href="#problem" class="hover:text-white">Problem</a>
+      <a href="#mythos" class="hover:text-white">Mythos</a>
       <a href="#how" class="hover:text-white hidden sm:inline">How it works</a>
       <a href="#ecosystem" class="hover:text-white hidden md:inline">Ecosystem</a>
       <a href="#roadmap" class="hover:text-white hidden md:inline">Roadmap</a>
@@ -106,7 +107,7 @@
       <p class="text-sm uppercase tracking-widest text-sky-400 font-medium">The problem</p>
       <h2 class="mt-4 text-3xl sm:text-4xl font-bold tracking-tight">Finding bugs is cheap. Tracking where they live is not.</h2>
       <p class="mt-6 text-lg text-slate-300 leading-relaxed">
-        AI-driven vulnerability discovery has collapsed the cost of finding flaws. The bottleneck now is mapping where the vulnerable code actually lives. No existing tool answers the question: <em class="text-white">given a vulnerability in project X, which forks, vendored copies, and compiled binaries are also affected?</em>
+        Frontier models like Anthropic's <a href="https://red.anthropic.com/2026/mythos-preview/" class="text-sky-400 hover:text-white underline decoration-sky-500/40">Claude Mythos Preview</a> have collapsed the cost of finding flaws. The bottleneck now is mapping where the vulnerable code actually lives. No existing tool answers the question: <em class="text-white">given a vulnerability in project X, which forks, vendored copies, and compiled binaries are also affected?</em>
       </p>
     </div>
 
@@ -130,6 +131,53 @@
 
     <div class="mt-10 p-6 rounded-xl border border-amber-900/40 bg-amber-950/20 text-amber-100/90">
       <p class="text-sm"><span class="font-semibold">Regulatory deadline.</span> EU Cyber Resilience Act takes effect <span class="font-mono text-amber-300">11 September 2026</span>. Penalties up to €15M or 2.5% of global turnover for non-compliance — and it requires lineage evidence that current SCA tools cannot provide.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Mythos: the discovery engine -->
+<section id="mythos" class="border-t border-slate-900 bg-slate-950 relative overflow-hidden">
+  <div class="absolute inset-0 grid-bg opacity-30"></div>
+  <div class="relative max-w-6xl mx-auto px-6 py-24">
+    <div class="rounded-2xl border border-indigo-500/30 bg-gradient-to-br from-indigo-950/40 via-slate-900/40 to-purple-950/30 p-8 sm:p-12">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-400/30 text-xs text-indigo-200 mb-6">
+        <span class="inline-block w-2 h-2 rounded-full bg-indigo-400 animate-pulse"></span>
+        The discovery engine
+      </div>
+      <h2 class="text-3xl sm:text-4xl font-bold tracking-tight">
+        Built for the discovery wave from <span class="gradient-text">Claude Mythos Preview</span>.
+      </h2>
+      <p class="mt-6 text-lg text-slate-300 max-w-3xl leading-relaxed">
+        Anthropic's <a href="https://red.anthropic.com/2026/mythos-preview/" class="text-indigo-300 underline decoration-indigo-500/40 hover:decoration-indigo-300">Claude Mythos Preview</a> is, in its own words,
+        <em class="text-white">"capable of identifying and then exploiting zero-day vulnerabilities in every major operating system and every major web browser."</em>
+        In a single month it surfaced thousands of high- and critical-severity bugs — among them a 27-year-old flaw in OpenBSD and a 16-year-old vulnerability in FFmpeg.
+      </p>
+      <p class="mt-5 text-lg text-slate-300 max-w-3xl leading-relaxed">
+        This is <span class="text-white font-medium">a different kind of tool doing a different kind of work</span>. And finding the bug faster isn't enough — the moment Mythos reports a flaw upstream, the urgent question becomes: <em class="text-white">where else does this exact code already live?</em> That is the question VIM exists to answer.
+      </p>
+
+      <div class="mt-10 grid sm:grid-cols-3 gap-4">
+        <div class="rounded-xl border border-slate-800 bg-slate-950/60 p-5">
+          <div class="text-xs uppercase tracking-widest text-indigo-300/80">1 · Discovery</div>
+          <p class="mt-2 font-semibold">Mythos · Project Glasswing</p>
+          <p class="mt-2 text-sm text-slate-400">Finds the zero-day in upstream code.</p>
+        </div>
+        <div class="rounded-xl border border-indigo-500/40 bg-indigo-950/30 p-5 ring-1 ring-indigo-500/20">
+          <div class="text-xs uppercase tracking-widest text-indigo-300">2 · Lineage</div>
+          <p class="mt-2 font-semibold text-white">VIM</p>
+          <p class="mt-2 text-sm text-slate-300">Traces every fork, vendored copy, and modified variant carrying the same code.</p>
+        </div>
+        <div class="rounded-xl border border-slate-800 bg-slate-950/60 p-5">
+          <div class="text-xs uppercase tracking-widest text-indigo-300/80">3 · Remediation</div>
+          <p class="mt-2 font-semibold">GUAC · OSV · deps.dev</p>
+          <p class="mt-2 text-sm text-slate-400">Maps affected artifacts and drives the fix downstream.</p>
+        </div>
+      </div>
+
+      <div class="mt-8 flex flex-wrap gap-x-6 gap-y-2 text-sm">
+        <a href="https://red.anthropic.com/2026/mythos-preview/" class="text-indigo-300 hover:text-white">Mythos Preview announcement &rarr;</a>
+        <a href="https://blog.cloudflare.com/cyber-frontier-models/" class="text-slate-400 hover:text-white">Why faster isn't enough &rarr;</a>
+      </div>
     </div>
   </div>
 </section>
@@ -269,9 +317,9 @@
 <section class="border-t border-slate-900 bg-slate-950">
   <div class="max-w-6xl mx-auto px-6 py-24">
     <p class="text-sm uppercase tracking-widest text-sky-400 font-medium">Try the prototype</p>
-    <h2 class="mt-4 text-3xl sm:text-4xl font-bold tracking-tight">The identity layer, today.</h2>
+    <h2 class="mt-4 text-3xl sm:text-4xl font-bold tracking-tight">From a Mythos finding to its blast radius — today.</h2>
     <p class="mt-6 text-lg text-slate-300 max-w-3xl leading-relaxed">
-      The trilateral identity resolution layer is runnable right now. Graph backend, ingestion, and GUAC integration land later in the roadmap.
+      The trilateral identity layer and an in-memory inheritance graph are runnable right now — including ingesting a Mythos report and tracing a finding across a corpus of forks and copies. The persistent graph backend (JanusGraph + Cassandra) and GUAC integration land later in the roadmap.
     </p>
 
     <div class="mt-10 rounded-xl border border-slate-800 bg-black/60 overflow-hidden">
@@ -295,7 +343,16 @@ TLSH:  5ca1d8a25f2136724b37cecb...</span>
 <span class="text-slate-500"># Compare two files by similarity</span>
 ./bin/vim-cli similarity a.c b.c
 <span class="text-emerald-400">TLSH distance: 48
-Result: MODERATE similarity (possibly related / patched variant)</span></pre>
+Result: MODERATE similarity (possibly related / patched variant)</span>
+
+<span class="text-slate-500"># Trace a Mythos finding across a corpus of forks &amp; copies</span>
+./bin/vim-cli query examples/mythos/findings.json examples/mythos/corpus
+<span class="text-emerald-400">CONFIRMED · byte-identical copies of the vulnerable code (2):
+  - upstream/parse.go
+  - verbatim-fork/parse.go
+REVIEW · shares lineage, fix may or may not be applied (2):
+  - patched-fork/parse.go      TLSH distance 25
+  - cosmetic-fork/parse.go     TLSH distance 26</span></pre>
     </div>
   </div>
 </section>
@@ -317,7 +374,7 @@ Result: MODERATE similarity (possibly related / patched variant)</span></pre>
         <li class="pl-12 relative">
           <span class="absolute left-0 top-1 inline-flex items-center justify-center w-6 h-6 rounded-full border-2 border-slate-700 bg-slate-950 text-xs font-bold text-slate-400">2</span>
           <h3 class="font-semibold text-lg">Technical build · Jun–Jul 2026</h3>
-          <p class="text-slate-400 mt-2">JanusGraph + Cassandra core · Software Heritage ingestion · Phase 1 GUAC integration · Glasswing public vulnerability report tie-in.</p>
+          <p class="text-slate-400 mt-2">JanusGraph + Cassandra core · Software Heritage ingestion · Phase 1 GUAC integration · Mythos / Project Glasswing vulnerability report tie-in.</p>
         </li>
         <li class="pl-12 relative">
           <span class="absolute left-0 top-1 inline-flex items-center justify-center w-6 h-6 rounded-full border-2 border-slate-700 bg-slate-950 text-xs font-bold text-slate-400">3</span>
