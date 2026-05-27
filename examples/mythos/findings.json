@@ -1,0 +1,15 @@
+{
+  "source": "mythos",
+  "generated": "2026-05-27T12:00:00Z",
+  "findings": [
+    {
+      "id": "MYTHOS-2026-0001",
+      "severity": "critical",
+      "summary": "Unbounded copy of attacker-controlled length into fixed scratch buffer (heap/stack overflow) in parse.Parse",
+      "target": {
+        "purl": "pkg:github/upstream/libparse@v1.2.0",
+        "path": "upstream/parse.go"
+      }
+    }
+  ]
+}
